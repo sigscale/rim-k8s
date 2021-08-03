@@ -1,0 +1,58 @@
+# Google Kubernetes Engine (GKE)
+
+## Create a k8s cluster
+	kusal@build:~$ gcloud container clusters create "cluster-1" \
+         	--machine-type "g1-small" \
+         	--image-type "COS" \
+         	--disk-type "pd-standard" \
+         	--disk-size "10" \
+         	--num-nodes "1" \
+         	--no-enable-ip-alias
+
+## List the k8s clusters available on GKE
+	kusal@build:~$ gcloud container clusters list
+	NAME       LOCATION      MASTER_VERSION  MASTER_IP    MACHINE_TYPE  NODE_VERSION    NUM_NODES  STATUS
+	cluster-1  asia-east1-b  1.20.8-gke.900  34.80.241.9  g1-small      1.20.8-gke.900  1          RUNNING
+
+## Get authentication credentials and configure kubectl to use the cluster
+	kusal@build:~$ gcloud container clusters get-credentials cluster-1
+	Fetching cluster endpoint and auth data.
+	kubeconfig entry generated for cluster-1.
+
+## Create and initialize OCS Deployment
+	kusal@build:~$ kubectl apply -f im-k8s/im-demo.yaml
+	deployment.apps/sigscale-im created
+
+## Get list of Deployments
+	kusal@build:~$ kubectl get deployments
+	NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+	sigscale-im   1/1     1            1           52m
+
+## Get list of Pods
+	kusal@build:~$ kubectl get pods
+	NAME                           READY   STATUS    RESTARTS   AGE
+	sigscale-im-6588fcbbc8-w9tz8   1/1     Running   0          53m
+
+## Attach to a GKE pod deployment which runs im container
+	kusal@build:~$ kubectl attach sigscale-im-6588fcbbc8-w9tz8 -c im -i -t
+	If you don't see a command prompt, try pressing enter.
+
+## Add REST Service
+	kusal@build:~$ kubectl apply -f im-k8s/im-rest.yaml 
+	service/im-rest created
+
+## List all services
+	kusal@build:~$ kubectl get services
+	NAME         TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)        AGE
+	im-rest      LoadBalancer   10.43.240.41   34.81.115.221   80:31445/TCP   65s
+	kubernetes   ClusterIP      10.43.240.1    <none>          443/TCP        7h20m
+
+## Describe the deployment
+	kusal@build:~$ kubectl describe deployment sigscale-im
+	Name:                   sigscale-im
+	Namespace:              default
+	...
+
+## Get all the PersistentVolumes
+	kusal@build:~$ kubectl get pv
+

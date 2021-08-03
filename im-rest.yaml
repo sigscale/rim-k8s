@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: im-rest
+  labels:
+    app.kubernetes.io/name: im
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/component: rest
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

@@ -1,0 +1,17 @@
+## SigScale IM REST Service
+##
+kind: Service
+apiVersion: v1
+metadata:
+  name: im-rest
+  labels:
+    app.kubernetes.io/name: im
+spec:
+  selector:
+    app.kubernetes.io/component: oam
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    appProtocol: http
+    port: 80
+    targetPort: rest

@@ -1,0 +1,101 @@
+## SigScale IM Cluster StatefulSet
+##
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: im
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: im
+  serviceName: otp
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: im
+        app.kubernetes.io/component: oam
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+      - name: im-init
+        image: asia.gcr.io/sigscale-oss/im
+        env:
+        - name: ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: otp-dist
+              key: ERLANG_COOKIE
+        stdin: true
+        tty: true
+        command:
+        - bash
+        - "-c"
+        - |
+          set -e
+          [[ `hostname --fqdn` =~ (^.*)-([0-9]+)?.(.*)$ ]] || exit 1
+          hostbase=${BASH_REMATCH[1]}
+          ordinal=${BASH_REMATCH[2]}
+          domain=${BASH_REMATCH[3]}
+          if [[ ${ordinal} -eq 0 ]]; then
+            bin/initialize
+          else
+            bin/join im@${hostbase}-$((--ordinal)).${domain}
+          fi
+        ports:
+        - name: epmd
+          protocol: TCP
+          containerPort: 4369
+        - name: erl-rpc
+          protocol: TCP
+          containerPort: 54861
+        volumeMounts:
+        - name: im-data
+          mountPath: /home/otp/db
+      containers:
+      - name: im
+        image: asia.gcr.io/sigscale-oss/im
+        env:
+        - name: ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: otp-dist
+              key: ERLANG_COOKIE
+        stdin: true
+        tty: true
+        ports:
+        - name: epmd
+          protocol: TCP
+          containerPort: 4369
+        - name: erl-rpc
+          protocol: TCP
+          containerPort: 54861
+        - name: rest
+          protocol: TCP
+          containerPort: 8080
+        volumeMounts:
+        - name: im-data
+          mountPath: /home/otp/db
+        readinessProbe:
+          httpGet:
+            httpHeaders:
+              - name: Accept
+                value: application/health+json
+              - name: Authorization
+                value: Basic YWRtaW46YWRtaW4=
+            path: /health
+            port: rest
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          failureThreshold: 6
+  volumeClaimTemplates:
+  - metadata:
+      name: im-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi

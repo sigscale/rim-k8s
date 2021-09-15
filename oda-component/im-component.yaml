@@ -1,6 +1,5 @@
-### sigscale-rim-odl.yaml
-###
-###
+## SigScale IM ODA Canvas Component
+##
 apiVersion: oda.tmforum.org/v1alpha3
 kind: component
 metadata:

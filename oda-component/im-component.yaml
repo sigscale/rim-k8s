@@ -19,7 +19,7 @@ spec:
       kind: StatefulSet
     - group: core
       kind: Secret
-  version: "1.0.0"
+  version: "2.0.2"
   description: "SigScale Resource Inventory Management (RIM)"
   maintainers:
     - name: SigScale

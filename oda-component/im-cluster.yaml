@@ -4,6 +4,8 @@ kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: im
+  labels:
+    oda.tmforum.org/componentName: sigscale-rim
 spec:
   selector:
     matchLabels:

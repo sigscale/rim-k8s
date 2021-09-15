@@ -31,17 +31,17 @@ spec:
     exposedAPIs:
     - name: party
       specification: https://github.com/tmforum/TMFAPISWAGGER/blob/develop/partyManagement/v2/swagger2.json
-      implementation: sigscale-rim-service
+      implementation: sigscale-rim-rest
       path: /partyManagement/v2/
       port: 8080
     - name: resourceCatalog
       specification: https://github.com/tmforum-apis/TMF620_ProductCatalog/blob/master/TMF620-ProductCatalog-v4.0.0.swagger.json
-      implementation: sigscale-rim-service
+      implementation: sigscale-rim-rest
       path: /resourceCatalogManagement/v4/
       port: 8080
     - name: resourceInventory
       specification: https://github.com/tmforum-apis/TMF639_ResourceInventory/blob/master/TMF639-ResourceInventory-v4.0.0.swagger.json
-      implementation: sigscale-rim-service
+      implementation: sigscale-rim-rest
       path: /resourceInventoryManagement/v4/
       port: 8080
     dependantAPIs: []

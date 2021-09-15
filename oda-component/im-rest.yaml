@@ -3,7 +3,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sigscale-rim-service
+  name: sigscale-rim-rest
   labels:
     app.kubernetes.io/name: im
     oda.tmforum.org/componentName: sigscale-rim

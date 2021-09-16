@@ -9,7 +9,7 @@ metadata:
     oda.tmforum.org/componentName: sigscale-rim
 spec:
   selector:
-    app.kubernetes.io/component: oam
+    app.kubernetes.io/component: im-node
   type: NodePort
   ports:
   - protocol: TCP

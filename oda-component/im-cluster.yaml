@@ -5,6 +5,7 @@ apiVersion: apps/v1
 metadata:
   name: im
   labels:
+    app.kubernetes.io/name: im
     oda.tmforum.org/componentName: sigscale-rim
 spec:
   selector:
@@ -16,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: im
-        app.kubernetes.io/component: oam
+        app.kubernetes.io/component: im-node
     spec:
       terminationGracePeriodSeconds: 30
       securityContext:

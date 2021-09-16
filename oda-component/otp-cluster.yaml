@@ -6,6 +6,7 @@ apiVersion: v1
 metadata:
   name: otp
   labels:
+    app.kubernetes.io/name: im
     oda.tmforum.org/componentName: sigscale-rim
 spec:
   selector:

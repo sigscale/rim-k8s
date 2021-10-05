@@ -22,7 +22,7 @@ spec:
       securityContext:
         fsGroup: 1000
       initContainers:
-      - name: im-install
+      - name: im-init
         image: asia.gcr.io/sigscale-oss/im
         stdin: true
         tty: true
@@ -37,7 +37,7 @@ spec:
         stdin: true
         tty: true
         ports:
-        - name: http
+        - name: rest
           protocol: TCP
           containerPort: 8080
         volumeMounts:

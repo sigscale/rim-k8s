@@ -44,7 +44,7 @@ spec:
       implementation: sigscale-rim-rest
       path: /resourceInventoryManagement/v4/
       port: 8080
-    dependantAPIs: []
+    dependentAPIs: []
   eventNotification:
     publishedEvents: []
     subscribedEvents: []
